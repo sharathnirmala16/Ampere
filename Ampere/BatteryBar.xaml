@@ -21,5 +21,10 @@
                 <DropShadowEffect x:Name="blurEffect" BlurRadius="30" ShadowDepth="0" Color="#35a0f6"/>
             </Rectangle.Effect>
         </Rectangle>
+        <Rectangle x:Name="chargingSymbol" HorizontalAlignment="Left" Height="126" Margin="37,92,0,0" RadiusX="10" VerticalAlignment="Top" Width="126">
+            <Rectangle.Fill>
+                <ImageBrush ImageSource="Charging.png" Stretch="Uniform"/>
+            </Rectangle.Fill>
+        </Rectangle>
     </Grid>
 </UserControl>

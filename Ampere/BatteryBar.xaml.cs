@@ -20,9 +20,11 @@ namespace Ampere
     /// </summary>
     public partial class BatteryBar : UserControl
     {
+        System.Windows.Forms.PowerStatus pwr;
         public BatteryBar()
         {
             InitializeComponent();
+            pwr = System.Windows.Forms.SystemInformation.PowerStatus;
         }
 
         public void ProgressBarValue(float value)
@@ -43,6 +45,15 @@ namespace Ampere
             {
                 ProgressValue.Fill = (Brush)(new BrushConverter().ConvertFrom("#ff1000"));
                 blurEffect.Color = Color.FromRgb(255, 16, 0);
+            }
+
+            if (pwr.PowerLineStatus.ToString() == "Online")
+            {
+                chargingSymbol.Visibility = Visibility.Visible;
+            }
+            else if (pwr.PowerLineStatus.ToString() == "Offline")
+            {
+                chargingSymbol.Visibility = Visibility.Hidden;
             }
         }
     }
