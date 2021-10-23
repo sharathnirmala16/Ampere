@@ -22,13 +22,15 @@ namespace Ampere
     public partial class MainWindow : Window
     {
         System.Windows.Forms.PowerStatus pwr;
+        bool offlineTrigger = false;
+        bool onlineTrigger = false;
         public MainWindow()
         {
             InitializeComponent();
             pwr = System.Windows.Forms.SystemInformation.PowerStatus;
             batteryBar.ProgressBarValue(GetBatteryPerc());
             DispatcherTimer mainTimer = new DispatcherTimer();
-            mainTimer.Interval = TimeSpan.FromMilliseconds(50);
+            mainTimer.Interval = TimeSpan.FromMilliseconds(1000);
             mainTimer.Tick += MainTimer_Tick;
             mainTimer.Start();
         }
@@ -41,6 +43,7 @@ namespace Ampere
             string batteryPluggedStatus = pwr.PowerLineStatus.ToString();
 
             int batteryTimeDischargeSec = pwr.BatteryLifeRemaining;
+            //int batteryTimeToCharge =
             string hours = (batteryTimeDischargeSec / 3600).ToString();
             string minutes = ((batteryTimeDischargeSec / 60) % 60).ToString();
             remainingBatteryLife(hours, minutes, batteryPluggedStatus);
@@ -50,13 +53,68 @@ namespace Ampere
         {
             if (chargingStatus == "Offline")
             {
-                batteryLifeLabel.Content = hours + "hr, " + minutes + "min";
+                if (hours == "0" && minutes == "0")
+                {
+                    switch (batteryLifeLabel.Content)
+                    {
+                        case "Updating lifetime":
+                            batteryLifeLabel.Content = "Updating lifetime.";
+                            break;
+                        case "Updating lifetime.":
+                            batteryLifeLabel.Content = "Updating lifetime..";
+                            break;
+                        case "Updating lifetime..":
+                            batteryLifeLabel.Content = "Updating lifetime...";
+                            break;
+                        case "Updating lifetime...":
+                            batteryLifeLabel.Content = "Updating lifetime";
+                            break;
+                        default:
+                            batteryLifeLabel.Content = "Updating lifetime";
+                            break;
+                    }
+                }
+                else if (hours == "0" && minutes != "0")
+                {
+                    if (Convert.ToInt32(minutes) > 1) batteryLifeLabel.Content = minutes + " minutes";
+                    else batteryLifeLabel.Content = minutes + " minute";
+                }
+                else
+                {
+                    if (Convert.ToInt32(hours) > 1 && Convert.ToInt32(minutes) > 1) batteryLifeLabel.Content = hours + " hours, " + minutes + " minutes";
+                    else if (Convert.ToInt32(hours) > 1 && Convert.ToInt32(minutes) == 1) batteryLifeLabel.Content = hours + " hours, " + minutes + " minute";
+                    else if (Convert.ToInt32(hours) == 1 && Convert.ToInt32(minutes) > 1) batteryLifeLabel.Content = hours + " hour, " + minutes + " minutes";
+                    else if (Convert.ToInt32(hours) == 1 && Convert.ToInt32(minutes) == 1) batteryLifeLabel.Content = hours + " hour, " + minutes + " minute";
+                }
             }
 
-            /*else if (chargingStatus == "Online")
+            else if (chargingStatus == "Online")
             {
-                batteryLifeLabel.Content = hours + "hr, " + minutes + "min";
-            }*/
+                if (onlineTrigger == false)
+                {
+                    batteryLifeLabel.Content = "Updating lifetime";
+                    onlineTrigger = true;
+                    offlineTrigger = false;
+                }
+                switch (batteryLifeLabel.Content)
+                {
+                    case "Charging":
+                        batteryLifeLabel.Content = "Charging.";
+                        break;
+                    case "Charging.":
+                        batteryLifeLabel.Content = "Charging..";
+                        break;
+                    case "Charging..":
+                        batteryLifeLabel.Content = "Charging...";
+                        break;
+                    case "Charging...":
+                        batteryLifeLabel.Content = "Charging";
+                        break;
+                    default:
+                        batteryLifeLabel.Content = "Charging";
+                        break;
+                }
+            }
         }
 
         private float GetBatteryPerc()
@@ -143,6 +201,14 @@ namespace Ampere
         {
             minButtonRec.Fill = (Brush)(new BrushConverter().ConvertFrom("#FF303030"));
             minButtonGrid.Background = (Brush)(new BrushConverter().ConvertFrom("#ffd40e"));
+        }
+
+        private void HideWhenMinimized()
+        {
+            if (this.WindowState == WindowState.Minimized)
+            {
+                this.Hide();
+            }
         }
     }
 }

@@ -5,17 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Ampere"
         mc:Ignorable="d"
-        Title="Ampere" Height="600" Width="800" ResizeMode="NoResize" Icon="Logo v1.png" WindowStyle="None" Background="White" WindowStartupLocation="CenterScreen">
+        Title="Ampere" Height="700" Width="400" ResizeMode="NoResize" Icon="Logo v1.png" WindowStyle="None" Background="White" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-                <GradientStop Color="#FF4D4D4D" Offset="1"/>
+                <GradientStop Color="#FF666666" Offset="1"/>
                 <GradientStop Color="#FFF0F0F0"/>
             </LinearGradientBrush>
         </Grid.Background>
-        <Rectangle HorizontalAlignment="Left" Height="40" RadiusX="10" Stroke="#ffd40e" VerticalAlignment="Top" Width="800" Fill="#ffd40e"/>
+        <Rectangle HorizontalAlignment="Left" Height="40" RadiusX="10" Stroke="#ffd40e" VerticalAlignment="Top" Width="400" Fill="#ffd40e"/>
         <Label Content="mpere" HorizontalAlignment="Left" Margin="40,0,0,0" VerticalAlignment="Top" Foreground="#FF303030" FontSize="20" Height="40" HorizontalContentAlignment="Left" VerticalContentAlignment="Bottom" Width="78" FontFamily="Felix Titling"/>
-        <Grid x:Name="clButtonGrid" HorizontalAlignment="Left" Height="40" Margin="760,0,0,0" VerticalAlignment="Top" Width="40" MouseEnter="clButtonGrid_MouseEnter" MouseLeave="clButtonGrid_MouseLeave" MouseDown="clButtonGrid_MouseDown">
+        <Grid x:Name="clButtonGrid" HorizontalAlignment="Left" Height="40" Margin="360,0,0,0" VerticalAlignment="Top" Width="40" MouseEnter="clButtonGrid_MouseEnter" MouseLeave="clButtonGrid_MouseLeave" MouseDown="clButtonGrid_MouseDown">
             <Rectangle x:Name="clButtonP" HorizontalAlignment="Center" Height="26" VerticalAlignment="Center" Width="2" Fill="#FF303030" Margin="20,8,18,6" RadiusX="3" RadiusY="3" RenderTransformOrigin="0.5,0.5" MouseEnter="clButtonP_MouseEnter" MouseLeave="clButtonP_MouseLeave">
                 <Rectangle.RenderTransform>
                     <TransformGroup>
@@ -39,9 +39,9 @@
 
             </Rectangle>
         </Grid>
-        <local:BatteryBar x:Name="batteryBar" Margin="10,45,594,261" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="196"/>
+        <local:BatteryBar x:Name="batteryBar" Margin="0,40,0,351" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="400" Height="309"/>
         <Rectangle HorizontalAlignment="Left" Height="40" Stroke="#FF303030" VerticalAlignment="Top" Width="40" RadiusX="10" Fill="#FF303030"/>
-        <Grid x:Name="minButtonGrid" HorizontalAlignment="Left" Height="40" Margin="724,0,0,0" VerticalAlignment="Top" Width="40" MouseEnter="minButtonGrid_MouseEnter" MouseLeave="minButtonGrid_MouseLeave" MouseDown="minButtonGrid_MouseDown">
+        <Grid x:Name="minButtonGrid" HorizontalAlignment="Left" Height="40" Margin="320,0,0,0" VerticalAlignment="Top" Width="40" MouseEnter="minButtonGrid_MouseEnter" MouseLeave="minButtonGrid_MouseLeave" MouseDown="minButtonGrid_MouseDown">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
@@ -63,7 +63,17 @@
                 <ImageBrush ImageSource="Logo v1.png"/>
             </Rectangle.Fill>
         </Rectangle>
-        <Label x:Name="percLabel" Foreground="#FF303030" Content="100%" HorizontalAlignment="Left" Margin="206,40,0,0" VerticalAlignment="Top" Height="108" Width="186" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="72"/>
-        <Label x:Name="batteryLifeLabel" Foreground="#FF303030" Content="1hr 52min remaining" HorizontalAlignment="Left" Margin="206,134,0,0" VerticalAlignment="Top" Height="34" Width="186" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="18"/>
+        <Label x:Name="percLabel" Foreground="#FF303030" Content="100%" HorizontalAlignment="Left" Margin="0,324,0,0" VerticalAlignment="Top" Height="108" Width="400" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="72"/>
+        <Label x:Name="batteryLifeLabel" Foreground="#FF303030" Content="1hr 52min remaining" HorizontalAlignment="Left" Margin="0,408,0,0" VerticalAlignment="Top" Height="34" Width="400" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="18" FontFamily="Segoe UI Semibold"/>
+        <Rectangle Fill="Transparent" HorizontalAlignment="Left" Height="243" Margin="10,447,0,0" RadiusX="10" VerticalAlignment="Top" Width="380">
+            <Rectangle.Stroke>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#2b2b2b" Offset="1"/>
+                    <GradientStop Color="#cbcbcb"/>
+                </LinearGradientBrush>
+            </Rectangle.Stroke>
+        </Rectangle>
+        <Label Content="Settings" HorizontalAlignment="Left" Margin="10,447,0,0" VerticalAlignment="Top" Width="380" HorizontalContentAlignment="Center" Foreground="#2b2b2b" FontSize="16" FontFamily="Segoe UI Semibold"/>
+        <local:Metal_Slider Margin="20,483,-20,-483"></local:Metal_Slider>
     </Grid>
 </Window>
