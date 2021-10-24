@@ -7,11 +7,11 @@
              mc:Ignorable="d" 
              d:DesignHeight="40" d:DesignWidth="360">
     <Grid>
-        <Rectangle HorizontalAlignment="Left" Height="40" RadiusX="6" VerticalAlignment="Top" Width="360" RadiusY="6">
+        <Rectangle x:Name="MainRectangle" HorizontalAlignment="Left" Height="40" RadiusX="6" VerticalAlignment="Top" Width="360" RadiusY="6">
             <Rectangle.Stroke>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#FF666666"/>
-                    <GradientStop Color="#FFF0F0F0" Offset="1"/>
+                    <GradientStop Color="#2b2b2b"/>
+                    <GradientStop Color="#cbcbcb" Offset="1"/>
                 </LinearGradientBrush>
             </Rectangle.Stroke>
             <Rectangle.Fill>
@@ -21,14 +21,15 @@
                 </LinearGradientBrush>
             </Rectangle.Fill>
         </Rectangle>
-        <Rectangle HorizontalAlignment="Left" Height="40" RadiusY="6" RadiusX="6" VerticalAlignment="Top" Width="40" StrokeThickness="2" Stroke="#FF2B2B2B">
+        <Rectangle x:Name="slideRectangle" HorizontalAlignment="Left" Height="40" RadiusY="6" RadiusX="6" VerticalAlignment="Top" Width="40" StrokeThickness="2" Stroke="#FF2B2B2B" MouseLeftButtonDown="Rectangle_MouseLeftButtonDown" MouseMove="slideRectangle_MouseMove" MouseLeftButtonUp="slideRectangle_MouseLeftButtonUp">
             <Rectangle.Fill>
                 <RadialGradientBrush>
                     <GradientStop Color="#FF6C6C6E" Offset="0"/>
-                    <GradientStop Color="#FFA9ACB6" Offset="1"/>
+                    <GradientStop Color="#cbcbcb" Offset="1"/>
                 </RadialGradientBrush>
             </Rectangle.Fill>
         </Rectangle>
+        <Canvas x:Name="backCanvas" HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="360"/>
 
     </Grid>
 </UserControl>

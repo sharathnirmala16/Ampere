@@ -82,10 +82,17 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="OptionBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Metal Slider.xaml.cs">
       <DependentUpon>Metal Slider.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OptionBar.xaml.cs">
+      <DependentUpon>OptionBar.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

@@ -1,0 +1,60 @@
+﻿<UserControl x:Class="Ampere.OptionBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Ampere"
+             mc:Ignorable="d" 
+             d:DesignHeight="40" d:DesignWidth="360">
+    <Grid>
+        <Rectangle x:Name="MainRectangle" HorizontalAlignment="Left" Height="40" RadiusX="6" VerticalAlignment="Top" Width="360" RadiusY="6">
+            <Rectangle.Stroke>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#2b2b2b"/>
+                    <GradientStop Color="#cbcbcb" Offset="1"/>
+                </LinearGradientBrush>
+            </Rectangle.Stroke>
+            <Rectangle.Fill>
+                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                    <GradientStop Color="#FF666666"/>
+                    <GradientStop Color="#FFF0F0F0" Offset="1"/>
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+        <Polygon x:Name="leftButton" Points="0,0 10,20 20,0" Margin="10,0,328,8" RenderTransformOrigin="0.5,0.5" Fill="#2b2b2b" StrokeThickness="2" HorizontalAlignment="Center" VerticalAlignment="Bottom" MouseLeftButtonDown="leftButton_MouseLeftButtonDown">
+            <Polygon.Stroke>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF6C6C6E" Offset="0"/>
+                    <GradientStop Color="#FFCBCBCB" Offset="1"/>
+                </LinearGradientBrush>
+            </Polygon.Stroke>
+            <Polygon.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="90"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Polygon.RenderTransform>
+
+        </Polygon>
+        <Polygon x:Name="rightButton" Points="0,0 10,20 20,0" Margin="328,0,10,9" RenderTransformOrigin="0.5,0.5" Fill="#2b2b2b" StrokeThickness="2" HorizontalAlignment="Center" VerticalAlignment="Bottom" MouseLeftButtonDown="rightButton_MouseLeftButtonDown">
+            <Polygon.Stroke>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF6C6C6E" Offset="0"/>
+                    <GradientStop Color="#FFCBCBCB" Offset="1"/>
+                </LinearGradientBrush>
+            </Polygon.Stroke>
+            <Polygon.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="-90"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Polygon.RenderTransform>
+
+        </Polygon>
+        <Label x:Name="alertLabel" Content="No Alerts" HorizontalAlignment="Left" Margin="42,0,0,0" VerticalAlignment="Top" Height="40" Width="276" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="#2b2b2b" FontFamily="Segoe UI Symbol" FontSize="16"/>
+    </Grid>
+</UserControl>

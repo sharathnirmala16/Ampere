@@ -24,6 +24,7 @@ namespace Ampere
         System.Windows.Forms.PowerStatus pwr;
         bool offlineTrigger = false;
         bool onlineTrigger = false;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -47,6 +48,8 @@ namespace Ampere
             string hours = (batteryTimeDischargeSec / 3600).ToString();
             string minutes = ((batteryTimeDischargeSec / 60) % 60).ToString();
             remainingBatteryLife(hours, minutes, batteryPluggedStatus);
+
+            //Warning Code
         }
 
         private void remainingBatteryLife(string hours, string minutes, string chargingStatus)
@@ -209,6 +212,53 @@ namespace Ampere
             {
                 this.Hide();
             }
+        }
+
+        private double ConvertToSliderVal(double rawValue)
+        {
+            return rawValue/320;
+        }
+
+        private void maxBatterySlider_MouseEnter(object sender, MouseEventArgs e)
+        {
+            double rawValue = maxBatterySlider.getSliderRawValue();
+            rawValue = ConvertToSliderVal(rawValue);
+
+            maxChargeLabel.Content = "Maximum Charge Alert: " + (int)(80 + (20 * rawValue)) + "%";
+        }
+
+        private void minBatterySlider_MouseEnter(object sender, MouseEventArgs e)
+        {
+            double rawValue = minBatterySlider.getSliderRawValue();
+            rawValue = ConvertToSliderVal(rawValue);
+
+            minChargeLabel.Content = "Maximum Charge Alert: " + (int)(10 + (20 * rawValue)) + "%";
+        }
+
+        private void maxBatterySlider_MouseLeave(object sender, MouseEventArgs e)
+        {
+            double rawValue = maxBatterySlider.getSliderRawValue();
+            rawValue = ConvertToSliderVal(rawValue);
+
+            maxChargeLabel.Content = "Maximum Charge Alert: " + (int)(80 + (20 * rawValue)) + "%";
+        }
+
+        private void minBatterySlider_MouseLeave(object sender, MouseEventArgs e)
+        {
+            double rawValue = minBatterySlider.getSliderRawValue();
+            rawValue = ConvertToSliderVal(rawValue);
+
+            minChargeLabel.Content = "Maximum Charge Alert: " + (int)(10 + (20 * rawValue)) + "%";
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            //if (testButton)
+        }
+
+        private void optionsBar_Loaded(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
