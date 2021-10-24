@@ -13,6 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using System.Speech.Synthesis;
+using System.Diagnostics;
+using System.IO;
 
 namespace Ampere
 {
@@ -22,18 +25,37 @@ namespace Ampere
     public partial class MainWindow : Window
     {
         System.Windows.Forms.PowerStatus pwr;
+        SpeechSynthesizer sys = new SpeechSynthesizer();
+
         bool offlineTrigger = false;
         bool onlineTrigger = false;
+        bool prevPwrLineStatus = false;
+
+        DispatcherTimer mainTimer = new DispatcherTimer();
+        DispatcherTimer secondTimer = new DispatcherTimer();
+
+        PerformanceCounter cpuUsageCounter;
+        PerformanceCounter ramUsageCounter;
+
+        int time10Count = 0;
 
         public MainWindow()
         {
             InitializeComponent();
+
             pwr = System.Windows.Forms.SystemInformation.PowerStatus;
-            batteryBar.ProgressBarValue(GetBatteryPerc());
-            DispatcherTimer mainTimer = new DispatcherTimer();
+            batteryBar.ProgressBarValue(GetBatteryPerc());  
+            
             mainTimer.Interval = TimeSpan.FromMilliseconds(1000);
+            secondTimer.Interval = TimeSpan.FromMilliseconds(1000);
+
             mainTimer.Tick += MainTimer_Tick;
+            secondTimer.Tick += SecondTimer_Tick;
+
             mainTimer.Start();
+
+            cpuUsageCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total", true);
+            ramUsageCounter = new PerformanceCounter("Memory", "% Committed Bytes in Use");
         }
 
         private void MainTimer_Tick(object sender, EventArgs e)
@@ -43,13 +65,110 @@ namespace Ampere
             percLabel.Content = ((int)batteryPerc).ToString() + "%";
             string batteryPluggedStatus = pwr.PowerLineStatus.ToString();
 
-            int batteryTimeDischargeSec = pwr.BatteryLifeRemaining;
-            //int batteryTimeToCharge =
+            int batteryTimeDischargeSec = pwr.BatteryLifeRemaining; //THIS NEEDS TO BE ADDED IN AN UPDATE (ML FEATURES)
+            //int batteryTimeToCharge = THIS NEEDS TO BE ADDED IN AN UPDATE (ML FEATURES)
             string hours = (batteryTimeDischargeSec / 3600).ToString();
             string minutes = ((batteryTimeDischargeSec / 60) % 60).ToString();
             remainingBatteryLife(hours, minutes, batteryPluggedStatus);
 
-            //Warning Code
+            //Code for warning the user
+            string alertText = optionsBar.CurrentPosText();
+            double maxValue = maxBatterySlider.getSliderRawValue();
+            double minValue = minBatterySlider.getSliderRawValue();
+            maxValue = ConvertToSliderVal(maxValue) + 80;
+            minValue = ConvertToSliderVal(minValue) + 10;
+            int tempIndex = percLabel.Content.ToString().IndexOf("%");
+            int currentValue = Convert.ToInt32(percLabel.Content.ToString().Remove(tempIndex, 1));
+
+            switch (alertText)
+            {
+                case "No Alerts":
+                    break;
+                case "Visual Alert":
+                    if (currentValue >= (int)maxValue && batteryPluggedStatus == "Online")
+                    {
+                        this.Show();
+                        ActivateAlertTimer(true);
+                    }
+                    else if (currentValue <= (int)minValue && batteryPluggedStatus == "Offline")
+                    {
+                        this.Show();
+                        ActivateAlertTimer(false);
+                    }
+                    break;
+                case "Aural Alert":
+                    if (currentValue >= (int)maxValue && batteryPluggedStatus == "Online")
+                    {
+                        sys.Speak("Your battery has charged up to " + currentValue.ToString() + " percent.");
+                        ActivateAlertTimer(true);
+                    }
+                    else if (currentValue <= (int)minValue && batteryPluggedStatus == "Offline")
+                    {
+                        sys.Speak("Your battery has charged up to " + currentValue.ToString() + " percent.");
+                        ActivateAlertTimer(false);
+                    }
+                    break;
+                case "Visual & Aural Alerts":
+                    if (currentValue >= (int)maxValue && batteryPluggedStatus == "Online")
+                    {
+                        this.Show();
+                        sys.Speak("Your battery has charged up to " + currentValue.ToString() + " percent.");
+                        ActivateAlertTimer(true);
+                    }
+                    else if (currentValue <= (int)minValue && batteryPluggedStatus == "Offline")
+                    {
+                        this.Show();
+                        sys.Speak("Your battery has charged up to " + currentValue.ToString() + " percent.");
+                        ActivateAlertTimer(false);
+                    }
+                    break;
+            }
+
+            string curDateTime = DateTime.Now.ToString();
+            LogDataPoint(batteryPerc, cpuUsageCounter.NextValue(), ramUsageCounter.NextValue(), batteryPluggedStatus, batteryTimeDischargeSec, curDateTime);
+        }
+
+        private void ActivateAlertTimer(bool prevPLS)
+        {
+            prevPwrLineStatus = prevPLS;
+            mainTimer.Stop();
+            secondTimer.Start();
+        }
+
+        private void LogDataPoint(float batteryPerc, float cpuUsageP, float ramUsageP, string batteryPluggedStatus, int windowsBatteryTimePred, string curDateTime)
+        {
+            //LOGS THE DATA EVERY 10 SECONDS
+            if (time10Count < 10) time10Count++;
+            else if (time10Count == 10)
+            {
+                time10Count = 0;
+                //Filepath must change when installed automatically
+                string fileName = "D:\\Computer Programming\\Programs\\C#\\Ampere Battery Indicator\\Ampere\\Data\\system_usage_data.csv";
+                string dataLog = batteryPerc.ToString() + "," + cpuUsageP.ToString() + "," + ramUsageP.ToString() + "," + batteryPluggedStatus + "," +
+                                 windowsBatteryTimePred.ToString() + "," + curDateTime + "\n";
+
+                if (File.Exists(fileName) == false)
+                {
+                    string dataHead = "Battery %,CPU %, RAM %, PLS, WBTP, DateTime" + Environment.NewLine;
+                    File.WriteAllText(fileName, dataHead);
+                }
+
+                File.AppendAllText(fileName, dataLog);
+            }
+        }
+
+        private void SecondTimer_Tick(object sender, EventArgs e)
+        {
+            string batteryPluggedStatus = pwr.PowerLineStatus.ToString();
+            bool curPluggedStatus = false;
+            if (batteryPluggedStatus == "Online") curPluggedStatus = true;
+
+            if (curPluggedStatus != prevPwrLineStatus)
+            {
+                secondTimer.Stop();
+                mainTimer.Start();
+                prevPwrLineStatus = curPluggedStatus;
+            }
         }
 
         private void remainingBatteryLife(string hours, string minutes, string chargingStatus)
@@ -175,6 +294,7 @@ namespace Ampere
         private void minButtonGrid_MouseDown(object sender, MouseButtonEventArgs e)
         {
             this.WindowState = WindowState.Minimized;
+            //this.Hide();
         }
 
         private void minButtonRec_MouseEnter(object sender, MouseEventArgs e)
@@ -232,7 +352,7 @@ namespace Ampere
             double rawValue = minBatterySlider.getSliderRawValue();
             rawValue = ConvertToSliderVal(rawValue);
 
-            minChargeLabel.Content = "Maximum Charge Alert: " + (int)(10 + (20 * rawValue)) + "%";
+            minChargeLabel.Content = "Minimum Charge Alert: " + (int)(10 + (20 * rawValue)) + "%";
         }
 
         private void maxBatterySlider_MouseLeave(object sender, MouseEventArgs e)
@@ -248,7 +368,7 @@ namespace Ampere
             double rawValue = minBatterySlider.getSliderRawValue();
             rawValue = ConvertToSliderVal(rawValue);
 
-            minChargeLabel.Content = "Maximum Charge Alert: " + (int)(10 + (20 * rawValue)) + "%";
+            minChargeLabel.Content = "Minimum Charge Alert: " + (int)(10 + (20 * rawValue)) + "%";
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -259,6 +379,16 @@ namespace Ampere
         private void optionsBar_Loaded(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void logoRec_MouseEnter(object sender, MouseEventArgs e)
+        {
+            logoLabel.Content = "nalytics";
+        }
+
+        private void logoRec_MouseLeave(object sender, MouseEventArgs e)
+        {
+            logoLabel.Content = "mpere";
         }
     }
 }

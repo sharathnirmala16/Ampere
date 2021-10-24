@@ -26,8 +26,8 @@ namespace Ampere
             InitializeComponent();
             arr[0] = "No Alerts";
             arr[1] = "Visual Alert";
-            arr[2] = "Audio Alert";
-            arr[3] = "Visual & Audio Alert";
+            arr[2] = "Aural Alert";
+            arr[3] = "Visual & Aural Alerts";
         }
 
         private void leftButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -68,6 +68,11 @@ namespace Ampere
             }
 
             return res;
+        }
+
+        public string CurrentPosText()
+        {
+            return alertLabel.Content.ToString();
         }
     }
 }
