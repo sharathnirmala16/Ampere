@@ -142,8 +142,13 @@ namespace Ampere
             else if (time10Count == 10)
             {
                 time10Count = 0;
-                //Filepath must change when installed automatically
-                string fileName = "D:\\Computer Programming\\Programs\\C#\\Ampere Battery Indicator\\Ampere\\Data\\system_usage_data.csv";
+                //Filepath must be be changed from C drive to frive where the app is installed
+                string dataFolderPath = "C:\\Ampere Data";
+                if (Directory.Exists(dataFolderPath) == false)
+                {
+                    Directory.CreateDirectory(dataFolderPath);
+                }
+                string fileName = dataFolderPath + "\\system_usage_data.csv";
                 string dataLog = batteryPerc.ToString() + "," + cpuUsageP.ToString() + "," + ramUsageP.ToString() + "," + batteryPluggedStatus + "," +
                                  windowsBatteryTimePred.ToString() + "," + curDateTime + "\n";
 
