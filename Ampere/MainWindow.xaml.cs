@@ -16,6 +16,7 @@ using System.Windows.Threading;
 using System.Speech.Synthesis;
 using System.Diagnostics;
 using System.IO;
+using System.Management;
 
 namespace Ampere
 {
@@ -31,17 +32,41 @@ namespace Ampere
         bool onlineTrigger = false;
         bool prevPwrLineStatus = false;
 
+        string DesignCapacityStr;
+        string FullChargeCapacityStr;
+        int WearPercentage;
+
         DispatcherTimer mainTimer = new DispatcherTimer();
         DispatcherTimer secondTimer = new DispatcherTimer();
 
         PerformanceCounter cpuUsageCounter;
         PerformanceCounter ramUsageCounter;
 
+        SelectQuery selectQuery;
+        ManagementObjectSearcher objOSDetails;
+        ManagementObjectCollection osDetailsCollection;
+
         int time10Count = 0;
 
         public MainWindow()
         {
             InitializeComponent();
+
+            //FIGURE OUT MSBATTERYCLASS
+            /*selectQuery = new SelectQuery("select DesignedCapacity from BatteryStaticData");
+            ManagementObjectSearcher objOSDetails = new ManagementObjectSearcher(selectQuery);
+            ManagementObjectCollection osDetailsCollection = objOSDetails.Get();
+            //Code to get wear levels
+            string temp = "";
+            foreach (ManagementObject mo in osDetailsCollection)
+            {
+                temp = (string)mo["Name"];
+                DesignCapacityStr = (string)mo["DesignCapacity"];
+                FullChargeCapacityStr = (string)mo["FullChargeCapacity"];
+            }
+            //WearPercentage = Convert.ToInt32(100 - (100 * Convert.ToDouble(FullChargeCapacityStr) / Convert.ToDouble(DesignCapacityStr)));
+            //MessageBox.Show("Wear Level : " + WearPercentage.ToString());
+            MessageBox.Show(temp);*/
 
             pwr = System.Windows.Forms.SystemInformation.PowerStatus;
             batteryBar.ProgressBarValue(GetBatteryPerc());  
@@ -60,6 +85,8 @@ namespace Ampere
 
         private void MainTimer_Tick(object sender, EventArgs e)
         {
+            topBar.Fill = (Brush)(new BrushConverter().ConvertFrom(batteryBar.ReturnBarColor()));
+            topBar.Stroke = topBar.Fill;
             float batteryPerc = GetBatteryPerc();
             batteryBar.ProgressBarValue(batteryPerc);
             percLabel.Content = ((int)batteryPerc).ToString() + "%";
@@ -125,7 +152,7 @@ namespace Ampere
             }
 
             string curDateTime = DateTime.Now.ToString();
-            LogDataPoint(batteryPerc, cpuUsageCounter.NextValue(), ramUsageCounter.NextValue(), batteryPluggedStatus, batteryTimeDischargeSec, curDateTime);
+            //LogDataPoint(batteryPerc, cpuUsageCounter.NextValue(), ramUsageCounter.NextValue(), batteryPluggedStatus, batteryTimeDischargeSec, curDateTime);
         }
 
         private void ActivateAlertTimer(bool prevPLS)

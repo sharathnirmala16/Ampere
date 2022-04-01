@@ -31,12 +31,17 @@ namespace Ampere
         {
             ProgressValue.Height = 243 * (value / 100);
 
-            if (value > 50)
+            if (value > 90)
+            {
+                ProgressValue.Fill = (Brush)(new BrushConverter().ConvertFrom("#0deb00"));
+                blurEffect.Color = Color.FromRgb(13, 235, 0);
+            }
+            else if (value <= 90 && value >= 50)
             {
                 ProgressValue.Fill = (Brush)(new BrushConverter().ConvertFrom("#35a0f6"));
-                blurEffect.Color = Color.FromRgb(53, 160, 246); 
+                blurEffect.Color = Color.FromRgb(53, 160, 246);
             }
-            else if (value <= 50 && value >= 15)
+            else if (value < 50 && value >= 15)
             {
                 ProgressValue.Fill = (Brush)(new BrushConverter().ConvertFrom("#ffd40e"));
                 blurEffect.Color = Color.FromRgb(255, 212, 14);
@@ -55,6 +60,11 @@ namespace Ampere
             {
                 chargingSymbol.Visibility = Visibility.Hidden;
             }
+        }
+
+        public string ReturnBarColor()
+        {
+            return Convert.ToString(ProgressValue.Fill);
         }
     }
 }
