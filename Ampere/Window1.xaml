@@ -55,7 +55,7 @@
 
             </Rectangle>
         </Grid>
-        <Label Content="Analytics" FontFamily="Felix Titling" HorizontalContentAlignment ="Center" Foreground="#FF303030" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Top" Height="40" Width="128" VerticalContentAlignment="Bottom"/>
+        <Label Content="Analytics" FontFamily="Segoe UI Semibold" HorizontalContentAlignment ="Left" Foreground="#FF303030" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Top" Height="40" Width="128" VerticalContentAlignment="Bottom"/>
         <Label Content="Battery Information" HorizontalAlignment="Left" Margin="0,39,0,0" VerticalAlignment="Top" Width="600" HorizontalContentAlignment="Center" Foreground="#2b2b2b" FontSize="18" FontFamily="Segoe UI Semibold" Height="50" VerticalContentAlignment="Center"/>
         <Grid HorizontalAlignment="Left" Height="150" Margin="20,90,0,0" VerticalAlignment="Top" Width="560">
             <GridSplitter HorizontalAlignment="Left" Height="150" Margin="280,0,0,0" VerticalAlignment="Top" Width="2" Background="#FF787878"/>
