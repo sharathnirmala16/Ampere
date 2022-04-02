@@ -56,5 +56,36 @@
             </Rectangle>
         </Grid>
         <Label Content="Analytics" FontFamily="Felix Titling" HorizontalContentAlignment ="Center" Foreground="#FF303030" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Top" Height="40" Width="128" VerticalContentAlignment="Bottom"/>
+        <Label Content="Battery Information" HorizontalAlignment="Left" Margin="0,39,0,0" VerticalAlignment="Top" Width="600" HorizontalContentAlignment="Center" Foreground="#2b2b2b" FontSize="18" FontFamily="Segoe UI Semibold" Height="50" VerticalContentAlignment="Center"/>
+        <Grid HorizontalAlignment="Left" Height="150" Margin="20,90,0,0" VerticalAlignment="Top" Width="560">
+            <GridSplitter HorizontalAlignment="Left" Height="150" Margin="280,0,0,0" VerticalAlignment="Top" Width="2" Background="#FF787878"/>
+            <GridSplitter HorizontalAlignment="Left" Height="150" Margin="0,0,0,0" VerticalAlignment="Top" Width="2" Background="#FF787878"/>
+            <GridSplitter HorizontalAlignment="Left" Height="150" Margin="558,0,0,0" VerticalAlignment="Top" Width="2" Background="#FF787878"/>
+            <GridSplitter HorizontalAlignment="Left" Height="2" Margin="0,0,0,0" VerticalAlignment="Top" Width="560" Background="#FF787878"/>
+            <GridSplitter HorizontalAlignment="Left" Height="2" Margin="0,148,0,0" VerticalAlignment="Top" Width="560" Background="#FF787878"/>
+            <GridSplitter HorizontalAlignment="Left" Height="2" Margin="0,30,0,0" VerticalAlignment="Top" Width="560" Background="#FF787878"/>
+            <GridSplitter HorizontalAlignment="Left" Height="2" Margin="0,60,0,0" VerticalAlignment="Top" Width="560" Background="#FF787878"/>
+            <GridSplitter HorizontalAlignment="Left" Height="2" Margin="0,90,0,0" VerticalAlignment="Top" Width="560" Background="#FF787878"/>
+            <GridSplitter HorizontalAlignment="Left" Height="2" Margin="0,120,0,0" VerticalAlignment="Top" Width="560" Background="#FF787878"/>
+            <Label Content="Name" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" Height="30" Width="280" FontSize="16" Foreground="#FF2B2B2B" FontFamily="Segoe UI Semilight" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+            <Label Content="Current Voltage" HorizontalAlignment="Left" Margin="0,30,0,0" VerticalAlignment="Top" Height="31" Width="280" FontSize="16" Foreground="#FF2B2B2B" FontFamily="Segoe UI Semilight" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+            <Label Content="Designed Capacity" HorizontalAlignment="Left" Margin="0,60,0,0" VerticalAlignment="Top" Height="31" Width="280" FontSize="16" Foreground="#FF2B2B2B" FontFamily="Segoe UI Semilight" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+            <Label Content="Full Charge Capacity" HorizontalAlignment="Left" Margin="0,90,0,0" VerticalAlignment="Top" Height="31" Width="280" FontSize="16" Foreground="#FF2B2B2B" FontFamily="Segoe UI Semilight" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+            <Label Content="Wear Level" HorizontalAlignment="Left" Margin="0,120,0,0" VerticalAlignment="Top" Height="31" Width="280" FontSize="16" Foreground="#FF2B2B2B" FontFamily="Segoe UI Semilight" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+            <Label x:Name="nameLabel" Content="AS15A7K" HorizontalAlignment="Left" Margin="280,0,0,0" VerticalAlignment="Top" Height="31" Width="280" FontSize="16" Foreground="#FF2B2B2B" FontFamily="Segoe UI Semilight" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+            <Label x:Name="voltageLabel" Content="16.638V" HorizontalAlignment="Left" Margin="280,30,0,0" VerticalAlignment="Top" Height="31" Width="280" FontSize="16" Foreground="#FF2B2B2B" FontFamily="Segoe UI Semilight" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+            <Label x:Name="designedCapLabel" Content="40770 mWh" HorizontalAlignment="Left" Margin="280,60,0,0" VerticalAlignment="Top" Height="31" Width="280" FontSize="16" Foreground="#FF2B2B2B" FontFamily="Segoe UI Semilight" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+            <Label x:Name="fullChargeCapLabel" Content="30770 mWh" HorizontalAlignment="Left" Margin="280,90,0,0" VerticalAlignment="Top" Height="31" Width="280" FontSize="16" Foreground="#FF2B2B2B" FontFamily="Segoe UI Semilight" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+            <Label x:Name="wearLabel" Content="20 %" HorizontalAlignment="Left" Margin="280,120,0,0" VerticalAlignment="Top" Height="31" Width="280" FontSize="16" Foreground="#FF2B2B2B" FontFamily="Segoe UI Semilight" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        </Grid>
+        <Rectangle HorizontalAlignment="Left" Height="330" Margin="20,250,0,0" VerticalAlignment="Top" Width="560" >
+            <Rectangle.Stroke>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF494949" Offset="0"/>
+                    <GradientStop Color="#FFBFBFBF" Offset="1"/>
+                </LinearGradientBrush>
+            </Rectangle.Stroke>
+        </Rectangle>
+        <Label Content="Title" HorizontalAlignment="Left" Margin="22,251,0,0" VerticalAlignment="Top" Height="30" Width="556" FontSize="18" Foreground="#FF2B2B2B" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
     </Grid>
 </Window>
