@@ -17,6 +17,9 @@ using System.Speech.Synthesis;
 using System.Diagnostics;
 using System.IO;
 using System.Management;
+using System.Management.Automation.Runspaces;
+using System.Collections.ObjectModel;
+using System.Management.Automation;
 
 namespace Ampere
 {
@@ -42,31 +45,11 @@ namespace Ampere
         PerformanceCounter cpuUsageCounter;
         PerformanceCounter ramUsageCounter;
 
-        SelectQuery selectQuery;
-        ManagementObjectSearcher objOSDetails;
-        ManagementObjectCollection osDetailsCollection;
-
         int time10Count = 0;
 
         public MainWindow()
         {
             InitializeComponent();
-
-            //FIGURE OUT MSBATTERYCLASS
-            /*selectQuery = new SelectQuery("select DesignedCapacity from BatteryStaticData");
-            ManagementObjectSearcher objOSDetails = new ManagementObjectSearcher(selectQuery);
-            ManagementObjectCollection osDetailsCollection = objOSDetails.Get();
-            //Code to get wear levels
-            string temp = "";
-            foreach (ManagementObject mo in osDetailsCollection)
-            {
-                temp = (string)mo["Name"];
-                DesignCapacityStr = (string)mo["DesignCapacity"];
-                FullChargeCapacityStr = (string)mo["FullChargeCapacity"];
-            }
-            //WearPercentage = Convert.ToInt32(100 - (100 * Convert.ToDouble(FullChargeCapacityStr) / Convert.ToDouble(DesignCapacityStr)));
-            //MessageBox.Show("Wear Level : " + WearPercentage.ToString());
-            MessageBox.Show(temp);*/
 
             pwr = System.Windows.Forms.SystemInformation.PowerStatus;
             batteryBar.ProgressBarValue(GetBatteryPerc());  
@@ -83,10 +66,52 @@ namespace Ampere
             ramUsageCounter = new PerformanceCounter("Memory", "% Committed Bytes in Use");
         }
 
+        private string RunScript(string script)
+        {
+            Runspace runspace = RunspaceFactory.CreateRunspace();
+            runspace.Open();
+            Pipeline pipeline = runspace.CreatePipeline();
+            pipeline.Commands.AddScript(script);
+            pipeline.Commands.Add("Out-String");
+            Collection<PSObject> results = pipeline.Invoke();
+            runspace.Close();
+            string res = "";
+            foreach (PSObject psobject in results)
+            {
+                res += psobject.ToString();
+            }
+            return res;
+        }
+
+        private void SetColor()
+        {
+            string color = batteryBar.ReturnBarColor();
+            switch (color)
+            {
+                case "#FF0DEB00":
+                    logoBox.Source = new BitmapImage(new Uri("Logo v2G.png", UriKind.Relative));
+                    Icon = new BitmapImage(new Uri("Logo v2G.png", UriKind.Relative));
+                    break;
+                case "#FF35A0F6":
+                    logoBox.Source = new BitmapImage(new Uri("Logo v2B.png", UriKind.Relative));
+                    Icon = new BitmapImage(new Uri("Logo v2B.png", UriKind.Relative));
+                    break;
+                case "#FFFFD40E":
+                    logoBox.Source = new BitmapImage(new Uri("Logo v2Y.png", UriKind.Relative));
+                    Icon = new BitmapImage(new Uri("Logo v2Y.png", UriKind.Relative));
+                    break;
+                case "#FFFF1000":
+                    logoBox.Source = new BitmapImage(new Uri("Logo v2R.png", UriKind.Relative));
+                    Icon = new BitmapImage(new Uri("Logo v2R.png", UriKind.Relative));
+                    break;
+            }
+            topBar.Fill = (Brush)(new BrushConverter().ConvertFrom(color));
+            topBar.Stroke = topBar.Fill;
+        }
+
         private void MainTimer_Tick(object sender, EventArgs e)
         {
-            topBar.Fill = (Brush)(new BrushConverter().ConvertFrom(batteryBar.ReturnBarColor()));
-            topBar.Stroke = topBar.Fill;
+            SetColor();
             float batteryPerc = GetBatteryPerc();
             batteryBar.ProgressBarValue(batteryPerc);
             percLabel.Content = ((int)batteryPerc).ToString() + "%";
@@ -250,23 +275,27 @@ namespace Ampere
                     onlineTrigger = true;
                     offlineTrigger = false;
                 }
-                switch (batteryLifeLabel.Content)
+                if (percLabel.Content.ToString() == "100%") batteryLifeLabel.Content = "Fully Charged";
+                else
                 {
-                    case "Charging":
-                        batteryLifeLabel.Content = "Charging.";
-                        break;
-                    case "Charging.":
-                        batteryLifeLabel.Content = "Charging..";
-                        break;
-                    case "Charging..":
-                        batteryLifeLabel.Content = "Charging...";
-                        break;
-                    case "Charging...":
-                        batteryLifeLabel.Content = "Charging";
-                        break;
-                    default:
-                        batteryLifeLabel.Content = "Charging";
-                        break;
+                    switch (batteryLifeLabel.Content)
+                    {
+                        case "Charging":
+                            batteryLifeLabel.Content = "Charging.";
+                            break;
+                        case "Charging.":
+                            batteryLifeLabel.Content = "Charging..";
+                            break;
+                        case "Charging..":
+                            batteryLifeLabel.Content = "Charging...";
+                            break;
+                        case "Charging...":
+                            batteryLifeLabel.Content = "Charging";
+                            break;
+                        default:
+                            batteryLifeLabel.Content = "Charging";
+                            break;
+                    }
                 }
             }
         }
@@ -278,8 +307,8 @@ namespace Ampere
 
         private void clButtonGrid_MouseEnter(object sender, MouseEventArgs e)
         {
-            clButtonM.Fill = (Brush)(new BrushConverter().ConvertFrom("#ffd40e"));
-            clButtonP.Fill = (Brush)(new BrushConverter().ConvertFrom("#ffd40e"));
+            clButtonM.Fill = (Brush)(new BrushConverter().ConvertFrom(batteryBar.ReturnBarColor()));
+            clButtonP.Fill = (Brush)(new BrushConverter().ConvertFrom(batteryBar.ReturnBarColor()));
             clButtonGrid.Background = (Brush)(new BrushConverter().ConvertFrom("#FF303030"));
         }
 
@@ -292,8 +321,8 @@ namespace Ampere
 
         private void clButtonM_MouseEnter(object sender, MouseEventArgs e)
         {
-            clButtonM.Fill = (Brush)(new BrushConverter().ConvertFrom("#ffd40e"));
-            clButtonP.Fill = (Brush)(new BrushConverter().ConvertFrom("#ffd40e"));
+            clButtonM.Fill = (Brush)(new BrushConverter().ConvertFrom(batteryBar.ReturnBarColor()));
+            clButtonP.Fill = (Brush)(new BrushConverter().ConvertFrom(batteryBar.ReturnBarColor()));
             clButtonGrid.Background = (Brush)(new BrushConverter().ConvertFrom("#FF303030"));
         }
 
@@ -306,8 +335,8 @@ namespace Ampere
 
         private void clButtonP_MouseEnter(object sender, MouseEventArgs e)
         {
-            clButtonM.Fill = (Brush)(new BrushConverter().ConvertFrom("#ffd40e"));
-            clButtonP.Fill = (Brush)(new BrushConverter().ConvertFrom("#ffd40e"));
+            clButtonM.Fill = (Brush)(new BrushConverter().ConvertFrom(batteryBar.ReturnBarColor()));
+            clButtonP.Fill = (Brush)(new BrushConverter().ConvertFrom(batteryBar.ReturnBarColor()));
             clButtonGrid.Background = (Brush)(new BrushConverter().ConvertFrom("#FF303030"));
         }
 
@@ -331,14 +360,14 @@ namespace Ampere
 
         private void minButtonRec_MouseEnter(object sender, MouseEventArgs e)
         {
-            minButtonRec.Fill = (Brush)(new BrushConverter().ConvertFrom("#ffd40e"));
+            minButtonRec.Fill = (Brush)(new BrushConverter().ConvertFrom(batteryBar.ReturnBarColor()));
             minButtonGrid.Background = (Brush)(new BrushConverter().ConvertFrom("#FF303030"));
         }
 
         private void minButtonRec_MouseLeave(object sender, MouseEventArgs e)
         {
             minButtonRec.Fill = (Brush)(new BrushConverter().ConvertFrom("#FF303030"));
-            minButtonGrid.Background = (Brush)(new BrushConverter().ConvertFrom("#ffd40e"));
+            minButtonGrid.Background = (Brush)(new BrushConverter().ConvertFrom(batteryBar.ReturnBarColor()));
         }
 
         private void minButtonRec_MouseDown(object sender, MouseButtonEventArgs e)
@@ -348,14 +377,14 @@ namespace Ampere
 
         private void minButtonGrid_MouseEnter(object sender, MouseEventArgs e)
         {
-            minButtonRec.Fill = (Brush)(new BrushConverter().ConvertFrom("#ffd40e"));
+            minButtonRec.Fill = (Brush)(new BrushConverter().ConvertFrom(batteryBar.ReturnBarColor()));
             minButtonGrid.Background = (Brush)(new BrushConverter().ConvertFrom("#FF303030"));
         }
 
         private void minButtonGrid_MouseLeave(object sender, MouseEventArgs e)
         {
             minButtonRec.Fill = (Brush)(new BrushConverter().ConvertFrom("#FF303030"));
-            minButtonGrid.Background = (Brush)(new BrushConverter().ConvertFrom("#ffd40e"));
+            minButtonGrid.Background = (Brush)(new BrushConverter().ConvertFrom(batteryBar.ReturnBarColor()));
         }
 
         private void HideWhenMinimized()
@@ -403,24 +432,25 @@ namespace Ampere
             minChargeLabel.Content = "Minimum Charge Alert: " + (int)(10 + (20 * rawValue)) + "%";
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void logoBox_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            //if (testButton)
+            Window1 analyticsWindow = new Window1(batteryBar.ReturnBarColor());
+            analyticsWindow.Show();
+        }
+
+        private void logoBox_MouseEnter(object sender, MouseEventArgs e)
+        {
+            logoLabel.Content = "nalytics";
+        }
+
+        private void logoBox_MouseLeave(object sender, MouseEventArgs e)
+        {
+            logoLabel.Content = "mpere";
         }
 
         private void optionsBar_Loaded(object sender, RoutedEventArgs e)
         {
 
-        }
-
-        private void logoRec_MouseEnter(object sender, MouseEventArgs e)
-        {
-            logoLabel.Content = "nalytics";
-        }
-
-        private void logoRec_MouseLeave(object sender, MouseEventArgs e)
-        {
-            logoLabel.Content = "mpere";
         }
     }
 }

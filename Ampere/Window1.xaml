@@ -1,0 +1,60 @@
+﻿<Window x:Class="Ampere.Window1"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Ampere"
+        mc:Ignorable="d"
+        Title="Analytics" Height="600" Width="600" ResizeMode="NoResize" WindowStyle="None" Background="White" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FF666666" Offset="1"/>
+                <GradientStop Color="#FFF0F0F0"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Rectangle x:Name="topBar" Fill="#ffd40e" HorizontalAlignment="Left" Height="40" RadiusX="10" Stroke="#ffd40e" VerticalAlignment="Top" Width="600" Margin="0,0,-3,0"/>
+        <Grid x:Name="clButtonGrid" HorizontalAlignment="Left" Height="40" Margin="561,0,-1,0" VerticalAlignment="Top" Width="40" MouseEnter="clButtonGrid_MouseEnter" MouseLeave="clButtonGrid_MouseLeave" MouseDown="clButtonGrid_MouseDown">
+            <Rectangle x:Name="clButtonP" HorizontalAlignment="Center" Height="26" VerticalAlignment="Center" Width="2" Fill="#FF303030" Margin="20,8,18,6" RadiusX="3" RadiusY="3" RenderTransformOrigin="0.5,0.5" MouseEnter="clButtonP_MouseEnter" MouseLeave="clButtonP_MouseLeave">
+                <Rectangle.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="45"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Rectangle.RenderTransform>
+
+            </Rectangle>
+            <Rectangle x:Name="clButtonM" HorizontalAlignment="Center" Height="26" VerticalAlignment="Center" Width="2" Fill="#FF303030" Margin="20,8,18,6" RadiusX="3" RadiusY="3" RenderTransformOrigin="0.5,0.5" MouseEnter="clButtonM_MouseEnter" MouseLeave="clButtonM_MouseLeave">
+                <Rectangle.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="-45"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Rectangle.RenderTransform>
+
+            </Rectangle>
+        </Grid>
+        <Grid x:Name="minButtonGrid" HorizontalAlignment="Left" Height="40" Margin="525,0,0,0" VerticalAlignment="Top" Width="40" MouseEnter="minButtonGrid_MouseEnter" MouseLeave="minButtonGrid_MouseLeave" MouseDown="minButtonGrid_MouseDown">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Rectangle x:Name="minButtonRec" HorizontalAlignment="Center" Height="25" VerticalAlignment="Center" Width="2" Fill="#FF303030" Margin="0,9,18,6" RadiusX="3" RadiusY="3" RenderTransformOrigin="0.5,0.5" MouseEnter="minButtonRec_MouseEnter" MouseLeave="minButtonRec_MouseLeave" MouseDown="minButtonRec_MouseDown" Grid.Column="1">
+                <Rectangle.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="90"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Rectangle.RenderTransform>
+
+            </Rectangle>
+        </Grid>
+        <Label Content="Analytics" FontFamily="Felix Titling" HorizontalContentAlignment ="Center" Foreground="#FF303030" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Top" Height="40" Width="128" VerticalContentAlignment="Bottom"/>
+    </Grid>
+</Window>

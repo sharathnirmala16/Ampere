@@ -5,8 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Ampere"
         mc:Ignorable="d"
-        Title="Ampere" Height="700" Width="400" ResizeMode="NoResize" Icon="Logo v1.png" WindowStyle="None" Background="White" WindowStartupLocation="CenterScreen">
+        Title="Ampere" Height="700" Width="400" ResizeMode="NoResize" Icon="Logo v2G.png" WindowStyle="None" Background="White" WindowStartupLocation="CenterScreen">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="489*"/>
+            <RowDefinition Height="211*"/>
+        </Grid.RowDefinitions>
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
                 <GradientStop Color="#FF666666" Offset="1"/>
@@ -39,8 +43,7 @@
 
             </Rectangle>
         </Grid>
-        <local:BatteryBar x:Name="batteryBar" Margin="0,40,0,351" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="400" Height="309"/>
-        <Rectangle HorizontalAlignment="Left" Height="40" Stroke="#FF303030" VerticalAlignment="Top" Width="40" RadiusX="10" Fill="#FF303030"/>
+        <local:BatteryBar x:Name="batteryBar" Margin="0,40,0,140.412" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="400" Height="309"/>
         <Grid x:Name="minButtonGrid" HorizontalAlignment="Left" Height="40" Margin="320,0,0,0" VerticalAlignment="Top" Width="40" MouseEnter="minButtonGrid_MouseEnter" MouseLeave="minButtonGrid_MouseLeave" MouseDown="minButtonGrid_MouseDown">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
@@ -58,14 +61,9 @@
 
             </Rectangle>
         </Grid>
-        <Rectangle x:Name="logoRec" HorizontalAlignment="Left" Height="40" Stroke="#FF303030" VerticalAlignment="Top" Width="40" RadiusX="10" MouseEnter="logoRec_MouseEnter" MouseLeave="logoRec_MouseLeave">
-            <Rectangle.Fill>
-                <ImageBrush ImageSource="Logo v1.png"/>
-            </Rectangle.Fill>
-        </Rectangle>
         <Label x:Name="percLabel" Foreground="#FF303030" Content="100%" HorizontalAlignment="Left" Margin="0,324,0,0" VerticalAlignment="Top" Height="108" Width="400" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="72"/>
         <Label x:Name="batteryLifeLabel" Foreground="#FF303030" Content="1hr 52min remaining" HorizontalAlignment="Left" Margin="0,408,0,0" VerticalAlignment="Top" Height="34" Width="400" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="18" FontFamily="Segoe UI Semibold"/>
-        <Rectangle Fill="Transparent" HorizontalAlignment="Left" Height="243" Margin="10,447,0,0" RadiusX="10" VerticalAlignment="Top" Width="380">
+        <Rectangle Fill="Transparent" HorizontalAlignment="Left" Height="243" Margin="10,447,0,0" RadiusX="10" VerticalAlignment="Top" Width="380" Grid.RowSpan="2">
             <Rectangle.Stroke>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="#2b2b2b" Offset="1"/>
@@ -74,10 +72,15 @@
             </Rectangle.Stroke>
         </Rectangle>
         <Label Content="Settings" HorizontalAlignment="Left" Margin="10,447,0,0" VerticalAlignment="Top" Width="380" HorizontalContentAlignment="Center" Foreground="#2b2b2b" FontSize="16" FontFamily="Segoe UI Semibold" Height="36" VerticalContentAlignment="Center"/>
-        <local:Metal_Slider x:Name="maxBatterySlider" Margin="10,545,10,115" HorizontalContentAlignment="Center" MouseEnter="maxBatterySlider_MouseEnter" MouseLeave="maxBatterySlider_MouseLeave"></local:Metal_Slider>
-        <local:Metal_Slider x:Name="minBatterySlider" Margin="10,614,10,46" HorizontalContentAlignment="Center" MouseEnter="minBatterySlider_MouseEnter" MouseLeave="minBatterySlider_MouseLeave"/>
-        <Label x:Name="maxChargeLabel" Content="Maximum Charge Alert: 80%" HorizontalAlignment="Left" Margin="10,585,0,0" VerticalAlignment="Top" Width="380" FontSize="16" Foreground="#FF2B2B2B" FontFamily="Segoe UI Semilight" HorizontalContentAlignment="Center"/>
-        <Label x:Name="minChargeLabel" Content="Minimum Charge Alert: 10%" HorizontalAlignment="Left" Margin="10,654,0,0" VerticalAlignment="Top" Width="380" FontSize="16" Foreground="#FF2B2B2B" FontFamily="Segoe UI Semilight" HorizontalContentAlignment="Center"/>
-        <local:OptionBar x:Name="optionsBar" Margin="10,483,10,165" RenderTransformOrigin="0.5,0.5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Loaded="optionsBar_Loaded"/>
+        <local:Metal_Slider x:Name="maxBatterySlider" Margin="10,55.588,10,115" HorizontalContentAlignment="Center" MouseEnter="maxBatterySlider_MouseEnter" MouseLeave="maxBatterySlider_MouseLeave" Grid.Row="1"></local:Metal_Slider>
+        <local:Metal_Slider x:Name="minBatterySlider" Margin="10,124.588,10,46" HorizontalContentAlignment="Center" MouseEnter="minBatterySlider_MouseEnter" MouseLeave="minBatterySlider_MouseLeave" Grid.Row="1"/>
+        <Label x:Name="maxChargeLabel" Content="Maximum Charge Alert: 80%" HorizontalAlignment="Left" Margin="10,95.588,0,0" VerticalAlignment="Top" Width="380" FontSize="16" Foreground="#FF2B2B2B" FontFamily="Segoe UI Semilight" HorizontalContentAlignment="Center" Grid.Row="1"/>
+        <Label x:Name="minChargeLabel" Content="Minimum Charge Alert: 10%" HorizontalAlignment="Left" Margin="10,164.588,0,0" VerticalAlignment="Top" Width="380" FontSize="16" Foreground="#FF2B2B2B" FontFamily="Segoe UI Semilight" HorizontalContentAlignment="Center" Grid.Row="1"/>
+        <local:OptionBar x:Name="optionsBar" Margin="10,483,10,165" RenderTransformOrigin="0.5,0.5" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Loaded="optionsBar_Loaded" Grid.RowSpan="2"/>
+        <Image x:Name="logoBox" HorizontalAlignment="Left" Height="40" VerticalAlignment="Top" Width="40" MouseDown="logoBox_MouseDown" MouseEnter="logoBox_MouseEnter" MouseLeave="logoBox_MouseLeave">
+            <Image.OpacityMask>
+                <ImageBrush ImageSource="Logo v2G.png"/>
+            </Image.OpacityMask>
+        </Image>
     </Grid>
 </Window>
