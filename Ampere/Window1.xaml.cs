@@ -108,19 +108,15 @@ namespace Ampere
             switch (uniColor)
             {
                 case "#FF0DEB00":
-                    //logoBox.Source = new BitmapImage(new Uri("Logo v2G.png", UriKind.Relative));
                     Icon = new BitmapImage(new Uri("Logo v2G.png", UriKind.Relative));
                     break;
                 case "#FF35A0F6":
-                    //logoBox.Source = new BitmapImage(new Uri("Logo v2B.png", UriKind.Relative));
                     Icon = new BitmapImage(new Uri("Logo v2B.png", UriKind.Relative));
                     break;
                 case "#FFFFD40E":
-                    //logoBox.Source = new BitmapImage(new Uri("Logo v2Y.png", UriKind.Relative));
                     Icon = new BitmapImage(new Uri("Logo v2Y.png", UriKind.Relative));
                     break;
                 case "#FFFF1000":
-                    //logoBox.Source = new BitmapImage(new Uri("Logo v2R.png", UriKind.Relative));
                     Icon = new BitmapImage(new Uri("Logo v2R.png", UriKind.Relative));
                     break;
             }
