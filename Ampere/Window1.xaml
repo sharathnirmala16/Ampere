@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Ampere"
         mc:Ignorable="d"
+        xmlns:winformChart="clr-namespace:System.Windows.Forms.DataVisualization.Charting;assembly=System.Windows.Forms.DataVisualization"
         Title="Analytics" Height="600" Width="600" ResizeMode="NoResize" WindowStyle="None" Background="White" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.Background>
@@ -86,6 +87,39 @@
                 </LinearGradientBrush>
             </Rectangle.Stroke>
         </Rectangle>
-        <Label Content="Title" HorizontalAlignment="Left" Margin="22,251,0,0" VerticalAlignment="Top" Height="30" Width="556" FontSize="18" Foreground="#FF2B2B2B" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <Label Content="Fully Charged" HorizontalAlignment="Left" Margin="22,251,0,0" VerticalAlignment="Top" Height="35" Width="556" FontSize="18" Foreground="#FF2B2B2B" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <WindowsFormsHost Margin="28,288,28,28">
+            <WindowsFormsHost.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF939393" Offset="0"/>
+                    <GradientStop Color="#FFC3C3C3" Offset="1"/>
+                </LinearGradientBrush>
+            </WindowsFormsHost.Background>
+            <winformChart:Chart x:Name="rateGraph" Dock="Fill">
+                <winformChart:Chart.Series>
+                    <winformChart:Series Name="series" ChartType="Line">
+
+                    </winformChart:Series>
+                </winformChart:Chart.Series>
+            </winformChart:Chart>
+        </WindowsFormsHost>
+        <GridSplitter HorizontalAlignment="Left" Height="286" Margin="28,288,0,0" VerticalAlignment="Top" Width="2">
+            <GridSplitter.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF3A3A3A" Offset="0"/>
+                    <GradientStop Color="#FFD8D8D8" Offset="1"/>
+                </LinearGradientBrush>
+            </GridSplitter.Background>
+        </GridSplitter>
+        <GridSplitter HorizontalAlignment="Left" Height="286" Margin="572,288,0,0" VerticalAlignment="Top" Width="2">
+            <GridSplitter.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF3A3A3A" Offset="0"/>
+                    <GradientStop Color="#FFD8D8D8" Offset="1"/>
+                </LinearGradientBrush>
+            </GridSplitter.Background>
+        </GridSplitter>
+        <GridSplitter HorizontalAlignment="Left" Height="2" Margin="28,288,0,0" VerticalAlignment="Top" Width="544" Background="#FF2E2E2E"/>
+        <GridSplitter HorizontalAlignment="Left" Height="2" Margin="28,572,0,0" VerticalAlignment="Top" Width="544" Background="#FFD8D8D8"/>
     </Grid>
 </Window>

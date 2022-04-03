@@ -31,13 +31,9 @@ namespace Ampere
         System.Windows.Forms.PowerStatus pwr;
         SpeechSynthesizer sys = new SpeechSynthesizer();
 
-        bool offlineTrigger = false;
+        bool offlineTrigger = true;
         bool onlineTrigger = false;
         bool prevPwrLineStatus = false;
-
-        string DesignCapacityStr;
-        string FullChargeCapacityStr;
-        int WearPercentage;
 
         DispatcherTimer mainTimer = new DispatcherTimer();
         DispatcherTimer secondTimer = new DispatcherTimer();
@@ -64,23 +60,6 @@ namespace Ampere
 
             cpuUsageCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total", true);
             ramUsageCounter = new PerformanceCounter("Memory", "% Committed Bytes in Use");
-        }
-
-        private string RunScript(string script)
-        {
-            Runspace runspace = RunspaceFactory.CreateRunspace();
-            runspace.Open();
-            Pipeline pipeline = runspace.CreatePipeline();
-            pipeline.Commands.AddScript(script);
-            pipeline.Commands.Add("Out-String");
-            Collection<PSObject> results = pipeline.Invoke();
-            runspace.Close();
-            string res = "";
-            foreach (PSObject psobject in results)
-            {
-                res += psobject.ToString();
-            }
-            return res;
         }
 
         private void SetColor()
@@ -151,12 +130,12 @@ namespace Ampere
                 case "Aural Alert":
                     if (currentValue >= (int)maxValue && batteryPluggedStatus == "Online")
                     {
-                        sys.Speak("Your battery has charged up to " + currentValue.ToString() + " percent.");
+                        sys.Speak("The battery has charged up to " + currentValue.ToString() + " percent.");
                         ActivateAlertTimer(true);
                     }
                     else if (currentValue <= (int)minValue && batteryPluggedStatus == "Offline")
                     {
-                        sys.Speak("Your battery has charged up to " + currentValue.ToString() + " percent.");
+                        sys.Speak("Only " + currentValue.ToString() + " percent charge left.");
                         ActivateAlertTimer(false);
                     }
                     break;
@@ -164,20 +143,20 @@ namespace Ampere
                     if (currentValue >= (int)maxValue && batteryPluggedStatus == "Online")
                     {
                         this.Show();
-                        sys.Speak("Your battery has charged up to " + currentValue.ToString() + " percent.");
+                        sys.Speak("The battery has charged up to " + currentValue.ToString() + " percent.");
                         ActivateAlertTimer(true);
                     }
                     else if (currentValue <= (int)minValue && batteryPluggedStatus == "Offline")
                     {
                         this.Show();
-                        sys.Speak("Your battery has charged up to " + currentValue.ToString() + " percent.");
+                        sys.Speak("Only " + currentValue.ToString() + " percent charge left.");
                         ActivateAlertTimer(false);
                     }
                     break;
             }
 
             string curDateTime = DateTime.Now.ToString();
-            //LogDataPoint(batteryPerc, cpuUsageCounter.NextValue(), ramUsageCounter.NextValue(), batteryPluggedStatus, batteryTimeDischargeSec, curDateTime);
+            LogDataPoint(batteryPerc, cpuUsageCounter.NextValue(), ramUsageCounter.NextValue(), batteryPluggedStatus, batteryTimeDischargeSec, curDateTime);
         }
 
         private void ActivateAlertTimer(bool prevPLS)
@@ -187,6 +166,51 @@ namespace Ampere
             secondTimer.Start();
         }
 
+        private string ObtainStringValues(string data, string specificName1, string specificName2)
+        {
+            data = data.Replace("\n", "");
+            data = data.Replace(" ", "");
+            int len = data.IndexOf(specificName2) - data.IndexOf(specificName1) - specificName1.Length;
+            string res = data.Substring(data.IndexOf(specificName1) + specificName1.Length, len);
+            res = res.Replace(" ", "");
+            return res;
+        }
+
+        private string RunScript(string script)
+        {
+            Runspace runspace = RunspaceFactory.CreateRunspace();
+            runspace.Open();
+            Pipeline pipeline = runspace.CreatePipeline();
+            pipeline.Commands.AddScript(script);
+            pipeline.Commands.Add("Out-String");
+            Collection<PSObject> results = pipeline.Invoke();
+            runspace.Close();
+            string res = "";
+            foreach (PSObject psobject in results)
+            {
+                res += psobject.ToString();
+            }
+            return res;
+        }
+
+        private double GetVoltage(string data)
+        {
+            double voltage = Convert.ToDouble(ObtainStringValues(data, "Voltage:", "PSComputerName")) / 1000;
+            return voltage;
+        }
+
+        private double GetChargeRate(string data)
+        {
+            double chargeRate = Convert.ToDouble(ObtainStringValues(data, "ChargeRate:", "Charging"));
+            return chargeRate;
+        }
+
+        private double GetDischargeRate(string data)
+        {
+            double dischargeRate = Convert.ToDouble(ObtainStringValues(data, "DischargeRate:", "Discharging"));
+            return dischargeRate;
+        }
+
         private void LogDataPoint(float batteryPerc, float cpuUsageP, float ramUsageP, string batteryPluggedStatus, int windowsBatteryTimePred, string curDateTime)
         {
             //LOGS THE DATA EVERY 10 SECONDS
@@ -194,19 +218,21 @@ namespace Ampere
             else if (time10Count == 10)
             {
                 time10Count = 0;
-                //Filepath must be be changed from C drive to frive where the app is installed
+                //Filepath must be be changed from C drive to drive where the app is installed
                 string dataFolderPath = "C:\\Ampere Data";
                 if (Directory.Exists(dataFolderPath) == false)
                 {
                     Directory.CreateDirectory(dataFolderPath);
                 }
+                string data = RunScript("gwmi -Name root\\wmi BatteryStatus Voltage, Charging, ChargeRate, Discharging, DischargeRate | Out-String");
                 string fileName = dataFolderPath + "\\system_usage_data.csv";
-                string dataLog = batteryPerc.ToString() + "," + cpuUsageP.ToString() + "," + ramUsageP.ToString() + "," + batteryPluggedStatus + "," +
-                                 windowsBatteryTimePred.ToString() + "," + curDateTime + "\n";
+                string dataLog = curDateTime + "," + batteryPerc.ToString() + "," + cpuUsageP.ToString() + "," + ramUsageP.ToString() + "," + batteryPluggedStatus + "," +
+                                 windowsBatteryTimePred.ToString() + "," + GetVoltage(data).ToString() + "," + GetChargeRate(data).ToString() + "," +
+                                 GetDischargeRate(data).ToString() + "\n";
 
                 if (File.Exists(fileName) == false)
                 {
-                    string dataHead = "Battery %,CPU %, RAM %, PLS, WBTP, DateTime" + Environment.NewLine;
+                    string dataHead = "DateTime,Battery %,CPU %,RAM %,PLS,WBTP,Voltage,ChargeRate,DischargeRate" + Environment.NewLine;
                     File.WriteAllText(fileName, dataHead);
                 }
 

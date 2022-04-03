@@ -15,6 +15,8 @@ using System.Windows.Threading;
 using System.Management.Automation;
 using System.Management.Automation.Runspaces;
 using System.Collections.ObjectModel;
+using System.Windows.Forms.DataVisualization;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace Ampere
 {
@@ -59,15 +61,7 @@ namespace Ampere
             data = data.Replace("\n", "");
             data = data.Replace(" ", "");
             int len = data.IndexOf(specificName2) - data.IndexOf(specificName1) - specificName1.Length;
-            string res = "";
-            try
-            {
-                res = data.Substring(data.IndexOf(specificName1) + specificName1.Length, len);
-            }
-            catch 
-            {
-                MessageBox.Show(specificName1 + " " + specificName2);
-            }
+            string res = data.Substring(data.IndexOf(specificName1) + specificName1.Length, len);
             res = res.Replace(" ", "");
             return res;   
         }
