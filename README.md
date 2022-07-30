@@ -4,8 +4,8 @@ The goal is to provide more in depth details compared to the default Windows bat
 Windows PowerShell while also trying to estimate the health condition of the battery based on its charging and discharging behavior. 
 It will also be able to give voice and visual alerts to a user about overcharge or overdischarge conditions.
 
-Screenshots of the GUIs:
-Main Window:
-![Main Window](https://github.com/sharathnirmala16/Ampere/blob/master/Assets/GUI%201%20Screenshot.png)
-Analytics Page:
-![Analytics Page](https://github.com/sharathnirmala16/Ampere/blob/master/Assets/GUI%202%20Screenshot.png)
+Screenshots of the GUIs:  
+Main Window:  
+![ScreenShot](https://github.com/sharathnirmala16/Ampere/blob/master/Assets/GUI%201%20Screenshot.png)  
+Analytics Page:  
+![ScreenShot](https://github.com/sharathnirmala16/Ampere/blob/master/Assets/GUI%202%20Screenshot.png)  
