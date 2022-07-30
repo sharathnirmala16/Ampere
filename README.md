@@ -6,6 +6,6 @@ It will also be able to give voice and visual alerts to a user about overcharge 
 
 Screenshots of the GUIs:
 Main Window:
-![Alt text](https://github.com/sharathnirmala16/Ampere/blob/master/Assets/GUI%201%20Screenshot.png)
+![Main Window](https://github.com/sharathnirmala16/Ampere/blob/master/Assets/GUI%201%20Screenshot.png)
 Analytics Page:
-![Alt text](https://github.com/sharathnirmala16/Ampere/blob/master/Assets/GUI%202%20Screenshot.png)
+![Analytics Page](https://github.com/sharathnirmala16/Ampere/blob/master/Assets/GUI%202%20Screenshot.png)
